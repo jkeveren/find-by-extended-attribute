@@ -1,1 +1,5 @@
-fintr
+# built executable
+find-by-extended-attribute
+
+# test files are built by test quite because git does not support xattrs
+test

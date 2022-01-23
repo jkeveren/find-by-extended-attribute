@@ -61,13 +61,13 @@ func recurse(l, le *log.Logger, xattrName string, xattrValue []byte, p string) {
 		// check xattrs of file
 		dest := make([]byte, len(xattrValue)) // len of 0 because most files will likely have no xattr value
 		_, err := unix.Fgetxattr(int(f.Fd()), xattrName, dest)
-		if err == unix.ENODATA {
-
-		} else if err == nil {
+		switch err {
+		case nil:
 			if bytes.Equal(xattrValue, dest) {
 				l.Println(p)
 			}
-		} else {
+		case unix.ENODATA, unix.ERANGE:
+		default:
 			le.Println(err)
 			return
 		}
